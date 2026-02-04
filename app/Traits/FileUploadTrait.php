@@ -3,6 +3,7 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Unique;
+
 use File;
 
 trait FileUploadTrait
