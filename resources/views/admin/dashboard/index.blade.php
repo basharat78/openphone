@@ -16,7 +16,7 @@
               <h4>Total Calls</h4>
             </div>
             <div class="card-body">
-              <h2 class="font-weight-bold">{{ $total_calls ?? 0 }}</h2>
+              <h2 class="font-weight-bold">{{ $stats['total_calls'] ?? 0 }}</h2>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
               <h4>Scored Calls</h4>
             </div>
             <div class="card-body">
-              <h2 class="font-weight-bold">{{ $scored_calls ?? 0 }}</h2>
+              <h2 class="font-weight-bold">{{ $stats['scored_calls'] ?? 0 }}</h2>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
               <h4>Pending Reviews</h4>
             </div>
             <div class="card-body">
-              <h2 class="font-weight-bold">{{ $pending_reviews ?? 0 }}</h2>
+              <h2 class="font-weight-bold">{{ $stats['pending_reviews'] ?? 0 }}</h2>
             </div>
           </div>
         </div>

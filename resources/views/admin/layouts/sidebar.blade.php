@@ -66,8 +66,12 @@
             <li class="{{ setSidebarActive(['admin.dashboard.index']) }}"><a class="nav-link"
                     href="{{ route('admin.dashboard.index') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
-
-
+            <li class=""><a class="nav-link"
+                    href=""><i class="fas fa-fingerprint"></i> <span>Calls</span></a>
+            </li>
+            <li class=""><a class="nav-link"
+                    href=""><i class="fas fa-comment-alt"></i> <span>Dispatcher</span></a>
+            </li>
            {{-- @can('user management index')
                             <li class="{{ setSidebarActive(['admin.user-management.index']) }}"><a class="nav-link"
                                     href="{{ route('admin.user-management.index') }}"><i class="fas fa-fingerprint"></i>
