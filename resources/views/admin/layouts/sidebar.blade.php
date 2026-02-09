@@ -15,7 +15,7 @@
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="{{ asset(auth()->user()->avatar ?? 'default/avatar.png') }}" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->name }}</div>
+                <div class="d-none d-md-inline-block">Hi, {{ auth()->user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{{ route('admin.profile') }}" class="dropdown-item has-icon">
@@ -66,12 +66,33 @@
             <li class="{{ setSidebarActive(['admin.dashboard.index']) }}"><a class="nav-link"
                     href="{{ route('admin.dashboard.index') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
-            <li class=""><a class="nav-link"
+            
+            <li class="menu-header">QC Management</li>
+            <li class="{{ setSidebarActive(['qc.calls.index']) && !request()->has('dispatcher_id') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('qc.calls.index') }}">
+                    <i class="fas fa-phone"></i> <span>All Calls</span>
+                </a>
+            </li>
+            <li class="dropdown {{ request()->has('dispatcher_id') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
+                    <span>Dispatchers</span></a>
+                <ul class="dropdown-menu">
+                    @foreach($sideBarDispatchers as $sidebarDispatcher)
+                        <li class="{{ request('dispatcher_id') == $sidebarDispatcher->id ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('qc.calls.index', ['dispatcher_id' => $sidebarDispatcher->id]) }}">
+                                {{ $sidebarDispatcher->name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </li>
+
+            {{-- <li class=""><a class="nav-link"
                     href=""><i class="fas fa-fingerprint"></i> <span>Calls</span></a>
             </li>
             <li class=""><a class="nav-link"
                     href=""><i class="fas fa-comment-alt"></i> <span>Dispatcher</span></a>
-            </li>
+            </li> --}}
            {{-- @can('user management index')
                             <li class="{{ setSidebarActive(['admin.user-management.index']) }}"><a class="nav-link"
                                     href="{{ route('admin.user-management.index') }}"><i class="fas fa-fingerprint"></i>

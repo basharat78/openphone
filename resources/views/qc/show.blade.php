@@ -1,14 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center space-x-4">
-            <a href="{{ route('qc.calls.index') }}" class="p-2 hover:bg-gray-800 rounded-full transition-colors text-gray-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </a>
-            <h2 class="font-bold text-2xl text-white leading-tight">
-                Review <span class="text-indigo-theme">Interaction</span>
-            </h2>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('qc.calls.index') }}" class="p-2 hover:bg-gray-800 rounded-full transition-colors text-gray-400 print:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </a>
+                <h2 class="font-bold text-2xl text-white leading-tight">
+                    Review <span class="text-indigo-theme">Interaction</span>
+                </h2>
+            </div>
+            <div class="print:hidden">
+                <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg font-bold text-xs text-gray-300 uppercase tracking-widest shadow-lg hover:bg-gray-700 transition duration-150">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Print Report
+                </button>
+            </div>
         </div>
     </x-slot>
+
+    <!-- Print Only Header -->
+    <div class="hidden print:block mb-8 text-center border-b-2 border-gray-900 pb-4">
+        <h2 class="text-2xl font-bold uppercase tracking-widest">Call Quality Performance Report</h2>
+        <p class="text-sm mt-1">Generated: {{ now()->format('F d, Y - h:i A') }}</p>
+    </div>
 
     <div class="py-12 bg-[#111827] min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -190,6 +204,89 @@
             --indigo-hover: #4338ca;
             --score-card-bg: #312e81;
         }
+
+        @media print {
+            body, .bg-[#111827] {
+                background-color: white !important;
+                color: black !important;
+            }
+            
+            .py-12 { padding-top: 0 !important; padding-bottom: 0 !important; }
+            
+            /* Hide non-printable components */
+            .print\:hidden,
+            .bg-[#1f2937] .p-8:has(audio),
+            .bg-[#1f2937] .flex:has(audio),
+            audio,
+            .btn-finalize,
+            .shadow-2xl,
+            .shadow-black\/50,
+            form button,
+            .absolute {
+                display: none !important;
+            }
+
+            /* Un-darken cards for printing */
+            .bg-\[\#1f2937\]\/90, .bg-\[\#1f2937\] {
+                background-color: white !important;
+                border: 1px solid #eee !important;
+                backdrop-filter: none !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+
+            .text-white, .text-gray-100, .text-gray-200, .text-gray-300, .text-gray-400 {
+                color: black !important;
+            }
+
+            .text-indigo-theme, .text-amber-400, .text-emerald-400 {
+                color: #312e81 !important; /* Professional dark blue for print */
+            }
+
+            /* Adjust grid for print */
+            .grid {
+                display: block !important;
+            }
+            
+            .lg\:col-span-2, .space-y-8 {
+                width: 100% !important;
+            }
+
+            /* Fix range sliders for print */
+            input[type='range'] {
+                display: none !important;
+            }
+            
+            /* Ensure the numeric scores are visible */
+            .relative.group span.absolute {
+                position: relative !important;
+                top: 0 !important;
+                right: 0 !important;
+                background: none !important;
+                border: none !important;
+                display: block !important;
+                font-size: 1.2rem !important;
+                font-weight: bold !important;
+            }
+
+            .rounded-3xl { border-radius: 8px !important; }
+            
+            /* Keep remarks box clear */
+            textarea {
+                border: 1px solid #ccc !important;
+                background: white !important;
+                color: black !important;
+            }
+
+            /* Summary score card */
+            .bg-indigo-600 {
+                background: #f3f4f6 !important;
+                border: 2px solid #312e81 !important;
+                color: #312e81 !important;
+            }
+            .text-indigo-100, .text-white\/70 { color: #666 !important; }
+        }
+
         .text-indigo-theme { color: var(--indigo-primary); }
         .bg-indigo-theme { background-color: var(--indigo-primary) !important; }
         .bg-score-card { background-color: var(--score-card-bg) !important; }

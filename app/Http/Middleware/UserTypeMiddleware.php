@@ -15,16 +15,16 @@ class UserTypeMiddleware
      */
     public function handle(Request $request, Closure $next , string $userType): Response
     {
-        if ($request->user()->user_type === $userType) {
+        $currentUserType = $request->user()->user_type;
+
+        // Admins can access everything, OR match the required type
+        if ($currentUserType === 'admin' || $currentUserType === $userType) {
             return $next($request);
         }
 
-        if ($request->user()->user_type === 'admin') {
-            return to_route('dashboard.index');
-        }
-
-        if ($request->user()->user_type === 'qc') {
-            return to_route('qc.calls.index');
+        // Otherwise redirect to their respective dashboard
+        if ($currentUserType === 'qc') {
+            return to_route('qc.dashboard');
         }
 
         return to_route('dashboard');

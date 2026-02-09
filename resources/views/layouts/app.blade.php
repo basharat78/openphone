@@ -16,7 +16,7 @@
     </head>
     <body class="font-sans antialiased text-gray-200">
         <div class="min-h-screen bg-[#111827]">
-            @if(Auth::user()->user_type === 'qc')
+            @if(request()->is('qc/*') || Auth::user()->user_type === 'qc')
                 @include('layouts.qc-navigation')
             @else
                 @include('layouts.navigation')

@@ -30,6 +30,16 @@
                     >
                         {{ __('Calls') }}
                     </x-nav-link>
+
+                    @if(Auth::user()->user_type === 'admin')
+                    <x-nav-link 
+                        :href="route('admin.dashboard.index')" 
+                        class="!text-gray-400 hover:!text-white transition-colors"
+                    >
+                        {{-- <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> --}}
+                        {{ __('Admin Panel') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -96,27 +106,33 @@
             <x-responsive-nav-link :href="route('qc.calls.index')" :active="request()->routeIs('qc.calls.*')">
                 {{ __('Calls') }}
             </x-responsive-nav-link>
+
+            @if(Auth::user()->user_type === 'admin')
+            <x-responsive-nav-link :href="route('admin.dashboard.index')" class="!text-amber-400 font-bold">
+                {{ __('Return to Admin') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 bg-gray-50">
+        <div class="pt-4 pb-1 border-t border-gray-800 bg-[#1f2937]/50">
             <div class="px-4 py-3">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-base text-gray-100">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-gray-400">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1 px-4 pb-4">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('profile.edit')" class="!text-gray-400 hover:!text-white hover:!bg-gray-800 transition-colors">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
-
+             
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();" class="text-red-600">
+                                        this.closest('form').submit();" class="text-red-500 hover:text-red-400 hover:!bg-red-900/20 transition-colors">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>

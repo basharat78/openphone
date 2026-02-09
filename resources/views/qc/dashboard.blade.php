@@ -5,16 +5,28 @@
                 {{ __('QC') }} <span class="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Analytics Dashboard</span>
             </h2>
             <div class="flex items-center space-x-4">
-                <form action="{{ route('qc.calls.sync') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg font-bold text-xs text-indigo-400 uppercase tracking-widest shadow-lg hover:bg-gray-700 focus:outline-none transition ease-in-out duration-150">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Sync Calls
+                <div class="print:hidden flex items-center space-x-2">
+                    <form action="{{ route('qc.calls.sync') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg font-bold text-xs text-indigo-400 uppercase tracking-widest shadow-lg hover:bg-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Sync
+                        </button>
+                    </form>
+                    <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg font-bold text-xs text-gray-300 uppercase tracking-widest shadow-lg hover:bg-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Print
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </x-slot>
+
+    <!-- Print Only Header -->
+    <div class="hidden print:block mb-8 text-center border-b-2 border-gray-900 pb-4">
+        <h2 class="text-2xl font-bold uppercase tracking-widest">QC Specialist Performance Analytics</h2>
+        <p class="text-sm mt-1">Report Generated: {{ now()->format('F d, Y - h:i A') }}</p>
+    </div>
 
     <div class="py-12 bg-[#111827] min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -174,4 +186,55 @@
             </div>
         </div>
     </div>
+    <style>
+        @media print {
+            body, .bg-\[\#111827\] {
+                background-color: white !important;
+                color: black !important;
+            }
+            .py-12 { padding-top: 0 !important; }
+
+            /* Hide interactive elements */
+            .print\:hidden, 
+            .bg-gradient-to-br i,
+            .bg-gradient-to-br svg,
+            .absolute {
+                display: none !important;
+            }
+
+            /* Un-darken cards */
+            .bg-\[\#1f2937\]\/90, .bg-\[\#1f2937\], .bg-gray-900\/50, .bg-gray-800\/30 {
+                background-color: white !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+            }
+
+            .bg-gradient-to-br.from-indigo-600 {
+                background: #f3f4f6 !important;
+                border: 2px solid #4f46e5 !important;
+                color: #4f46e5 !important;
+            }
+
+            .text-white, .text-gray-100, .text-gray-200, .text-gray-400, .text-gray-500 {
+                color: black !important;
+            }
+
+            .text-indigo-400, .text-emerald-400, .text-amber-400 {
+                color: #4f46e5 !important;
+            }
+
+            .divide-gray-800 { divide-color: #eee !important; }
+            
+            /* Responsive grid fix for print */
+            .grid { display: block !important; }
+            .grid > div { margin-bottom: 20px !important; break-inside: avoid; }
+            
+            table { width: 100% !important; border-collapse: collapse !important; }
+            th, td { border: 1px solid #eee !important; padding: 10px !important; }
+
+            .rounded-3xl, .rounded-2xl { border-radius: 8px !important; }
+        }
+    </style>
 </x-app-layout>
