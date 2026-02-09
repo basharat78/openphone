@@ -28,6 +28,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+
+        if ($user->user_type === 'admin') {
+            return redirect()->route('dashboard.index'); // Corrected Admin Route
+        }
+
+        if ($user->user_type === 'qc') {
+            return redirect()->route('qc.calls.index');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

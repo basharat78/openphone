@@ -15,11 +15,18 @@ class UserTypeMiddleware
      */
     public function handle(Request $request, Closure $next , string $userType): Response
     {
-        if($request->user()->user_type === $userType){
+        if ($request->user()->user_type === $userType) {
             return $next($request);
         }
 
-        return to_route('admin.dashboard');
-        return $next($request);
+        if ($request->user()->user_type === 'admin') {
+            return to_route('dashboard.index');
+        }
+
+        if ($request->user()->user_type === 'qc') {
+            return to_route('qc.calls.index');
+        }
+
+        return to_route('dashboard');
     }
 }

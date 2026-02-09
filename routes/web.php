@@ -18,3 +18,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// QC Routes
+Route::middleware(['auth', 'user.type:qc'])->prefix('qc')->name('qc.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Qc\CallController::class, 'dashboard'])->name('dashboard');
+    Route::get('/calls', [App\Http\Controllers\Qc\CallController::class, 'index'])->name('calls.index');
+    Route::post('/calls/sync', [App\Http\Controllers\Qc\CallController::class, 'sync'])->name('calls.sync');
+    Route::get('/calls/{call}', [App\Http\Controllers\Qc\CallController::class, 'show'])->name('calls.show');
+    Route::post('/calls/{call}/score', [App\Http\Controllers\Qc\CallController::class, 'storeScore'])->name('calls.store_score');
+});
+

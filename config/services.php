@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'openphone' => [
+        'key' => env('OPENPHONE_API_KEY'),
+        'base_url' => env('OPENPHONE_BASE_URL', 'https://api.openphone.com/v1'),
+    ],
+
 ];
