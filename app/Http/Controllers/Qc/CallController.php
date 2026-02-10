@@ -63,7 +63,7 @@ class CallController extends Controller
      */
     public function sync()
     {
-        Artisan::call('calls:import');
+        Artisan::queue('calls:import');
         
         return back()->with('success', 'Calls synced successfully.');
     }

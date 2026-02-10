@@ -21,10 +21,10 @@ class UserSeeder extends Seeder
                 'user_type' => 'admin'
             ],
             [
-                'name' => 'Jhone deo',
-                'email' => 'user@gmail.com',
-                'password' => Hash::make('user123'), // password
-                'user_type' => 'user'
+                'name' => 'QC User',
+                'email' => 'qc@gmail.com',
+                'password' => Hash::make('qc123'), // password
+                'user_type' => 'qc'
             ]
         ]);
     }
