@@ -34,11 +34,12 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard.index');
         }
 
-        if ($user->user_type === 'qc') {
-            return redirect()->route('qc.dashboard');
-        }
+        // if ($user->user_type === 'qc') {
+        //     return redirect()->route('qc.dashboard');
+        // }
+        return redirect()->intended(route('qc.dashboard', absolute: false));
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
