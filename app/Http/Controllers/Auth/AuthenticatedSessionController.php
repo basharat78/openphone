@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->user_type === 'qc') {
-            return redirect()->route('qc.calls.index');
+            return redirect()->route('qc.dashboard');
         }
 
         return redirect()->intended(route('dashboard', absolute: false));

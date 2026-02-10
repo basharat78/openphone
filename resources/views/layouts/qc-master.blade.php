@@ -16,7 +16,10 @@
     </head>
     <body class="font-sans antialiased bg-gray-50">
         <div class="min-h-screen">
-            @include('layouts.qc-navigation')
+            {{-- @include('layouts.qc-navigation') --}}
+@if(!View::hasSection('hideNavigation'))
+    @include('layouts.qc-navigation')
+@endif
 
             <!-- Page Content -->
             <main>

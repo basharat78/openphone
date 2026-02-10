@@ -24,5 +24,8 @@ class AppServiceProvider extends ServiceProvider
         if (file_exists($helper)) {
             require_once $helper;
         }
+             \Illuminate\Support\Facades\View::composer('admin.layouts.sidebar', function ($view) {
+            $view->with('sideBarDispatchers', \App\Models\Dispatcher::orderBy('name')->get());
+        });
     }
 }

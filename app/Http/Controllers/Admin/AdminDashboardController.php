@@ -15,7 +15,7 @@ class AdminDashboardController extends Controller
         $totalCalls = Call::count();
         $scoredCalls = QcScore::count();
         $pendingCalls = $totalCalls - $scoredCalls;
-        $sideBarDispatchers = Dispatcher::all();
+       
 
         // Dispatcher Performance (All-time stats for the table)
         $dispatcherStats = Dispatcher::with('calls.qcScore')
@@ -100,6 +100,6 @@ class AdminDashboardController extends Controller
                 ];
             });
 
-        return view('admin.dashboard.index', compact('totalCalls', 'scoredCalls', 'pendingCalls', 'agentCards', 'dispatcherStats', 'sideBarDispatchers'));
+        return view('admin.dashboard.index', compact('totalCalls', 'scoredCalls', 'pendingCalls', 'agentCards', 'dispatcherStats'));
     }
 }
