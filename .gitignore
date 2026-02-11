@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+*_error.txt
+import_error.txt
+test_*.php
+sample_*.json

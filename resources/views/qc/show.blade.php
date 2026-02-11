@@ -109,6 +109,56 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- AI Summary Card -->
+                    <div class="bg-[#1f2937]/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-black/50 border border-gray-800 p-8">
+                        <div class="flex items-center mb-6">
+                            <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl mr-4 border border-indigo-500/20 shadow-[0_0_15px_rgba(79,70,229,0.1)]">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-100 italic">AI Transcription Summary</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest mt-0.5">Automated Insights</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 group transition-all duration-300 hover:border-indigo-500/30">
+                            @if($call->summary)
+                                <p class="text-gray-300 leading-relaxed text-sm italic">
+                                    "{{ $call->summary }}"
+                                </p>
+                            @else
+                                <div class="flex flex-col items-center py-4 text-center">
+                                    <svg class="w-10 h-10 text-gray-700 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <p class="text-gray-500 text-xs font-medium">No AI summary available for this interaction yet.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- AI Transcript Card -->
+                    <div class="bg-[#1f2937]/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-black/50 border border-gray-800 p-8">
+                        <div class="flex items-center mb-6">
+                            <div class="p-3 bg-fuchsia-500/10 text-fuchsia-400 rounded-xl mr-4 border border-fuchsia-500/20 shadow-[0_0_15px_rgba(217,70,239,0.1)]">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-100 italic">Call Transcript</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest mt-0.5">Full Conversation</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 rounded-2xl border border-gray-800 max-h-[400px] overflow-y-auto custom-scrollbar group transition-all duration-300 hover:border-fuchsia-500/30">
+                            @if($call->transcript)
+                                <div class="p-6">
+                                    <pre class="whitespace-pre-wrap text-gray-400 text-sm leading-relaxed font-sans">{{ $call->transcript }}</pre>
+                                </div>
+                            @else
+                                <div class="flex flex-col items-center py-8 text-center">
+                                    <svg class="w-10 h-10 text-gray-700 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <p class="text-gray-500 text-xs font-medium">Transcript is not available for this interaction.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Scoring Sidebar -->
@@ -317,6 +367,20 @@
             cursor: pointer;
             border: 3px solid white;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111827;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
         }
     </style>
 </x-app-layout>

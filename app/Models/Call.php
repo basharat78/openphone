@@ -17,6 +17,8 @@ class Call extends Model
         'status',
         'recording_url',
         'duration',
+        'summary',
+        'transcript',
         'called_at',
     ];
 

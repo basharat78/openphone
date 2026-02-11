@@ -32,31 +32,43 @@ class ImportCalls extends Command
         $date = $this->argument('date') ?? now()->toDateString();
         $this->info("Importing calls for date: $date");
 
-        // Fetch users to map IDs to names
-        $users = $openPhoneService->fetchUsers();
-        $userMap = collect($users)->keyBy('id');
-        $this->info("Fetched " . count($users) . " users for mapping.");
+        // Fetch phone numbers (Inboxes) to map IDs to names
+        $phoneNumbers = $openPhoneService->fetchPhoneNumbers();
+        $pnMap = collect($phoneNumbers)->keyBy('id');
+        $this->info("Fetched " . count($phoneNumbers) . " inboxes for mapping.");
 
-        $calls = $openPhoneService->fetchCalls($date);
+        $callsGenerator = $openPhoneService->fetchCalls($date);
 
-        // Map calls to dispatchers
-        foreach ($calls as $callData) {
-            $openPhoneUserId = $callData['userId'] ?? null;
-            if (!$openPhoneUserId) {
+        $count = 0;
+        // Map calls to dispatchers (Inboxes)
+        foreach ($callsGenerator as $callData) {
+            $phoneNumberId = $callData['phoneNumberId'] ?? null;
+            if (!$phoneNumberId) {
                 continue;
             }
 
-            $opUser = $userMap->get($openPhoneUserId);
-            $name = $opUser ? ($opUser['firstName'] . ' ' . $opUser['lastName']) : ('Unknown Dispatcher ' . $openPhoneUserId);
-            $email = $opUser['email'] ?? ($openPhoneUserId . '@example.com');
+            $inbox = $pnMap->get($phoneNumberId);
+            $name = $inbox ? $inbox['name'] : ('Unknown Inbox ' . $phoneNumberId);
+            $email = $inbox['name'] . '@example.com'; 
 
             $dispatcher = Dispatcher::updateOrCreate(
-                ['openphone_id' => $openPhoneUserId],
+                ['openphone_id' => $phoneNumberId],
                 [
                     'name' => $name,
                     'email' => $email
                 ]
             );
+
+            // Fetch recording URL separately now
+            $recordingUrl = $openPhoneService->fetchRecordingUrl($callData['id']);
+            $summary = null;
+            $transcript = null;
+
+            if ($recordingUrl && $callData['duration'] > 0) {
+                $this->info("Fetching summary and transcript for call: " . $callData['id']);
+                $summary = $openPhoneService->fetchCallSummary($callData['id']);
+                $transcript = $openPhoneService->fetchCallTranscription($callData['id']);
+            }
 
             Call::updateOrCreate(
                 ['openphone_call_id' => $callData['id']],
@@ -67,12 +79,18 @@ class ImportCalls extends Command
                     'direction' => $callData['direction'],
                     'status' => $callData['duration'] > 0 ? 'completed' : 'missed',
                     'duration' => $callData['duration'],
-                    'recording_url' => $callData['recording_url'] ?? null,
-                    'called_at' => Carbon::parse($callData['created_at']),
+                    'recording_url' => $recordingUrl,
+                    'summary' => $summary,
+                    'transcript' => $transcript,
+                    'called_at' => Carbon::parse($callData['created_at'])->setTimezone(config('app.timezone')),
                 ]
             );
+            $count++;
+            if ($count % 10 == 0) {
+                $this->info("Processed $count calls...");
+            }
         }
 
-        $this->info("Import completed: " . count($calls) . " calls processed.");
+        $this->info("Import completed: $count calls processed.");
     }
 }
