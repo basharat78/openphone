@@ -81,13 +81,17 @@ class OpenPhoneService
             }
             Log::info('OpenPhone: Starting fetch with generator after ' . $createdAfter);
 
+            // Fetch inboxes for number mapping
+            $inboxes = $this->fetchPhoneNumbers();
+            $inboxMap = collect($inboxes)->pluck('number', 'id')->toArray();
+
             $processedParticipants = [];
             $convPageToken = null;
 
             // Step 1: Paginate through all conversations
             do {
                 $convParams = [
-                    'createdAfter' => $createdAfter,
+                    'updatedAfter' => $createdAfter,
                     'maxResults' => 100
                 ];
                 if ($convPageToken) {
@@ -151,8 +155,16 @@ class OpenPhoneService
                                 // We don't fetch recording_url here to avoid slow individual API calls
                                 // The recording URL will be fetched on-demand during the import process
                                 $participants_list = $call['participants'] ?? [];
-                                $from = $call['direction'] === 'outgoing' ? 'TruckZap' : ($participants_list[0] ?? 'Unknown');
-                                $to = $call['direction'] === 'incoming' ? 'TruckZap' : ($participants_list[1] ?? ($participants_list[0] ?? 'Unknown'));
+                                $ourNumber = $inboxMap[$pnId] ?? 'Unknown';
+                                
+                                // Find the first participant that is not our inbox number
+                                $clientNumber = collect($participants_list)
+                                    ->first(fn($p) => $p !== $ourNumber) ?? ($participants_list[0] ?? 'Unknown');
+
+                                // For outgoing: from = our number, to = client number
+                                // For incoming: from = client number, to = our number
+                                $from = $call['direction'] === 'outgoing' ? $ourNumber : $clientNumber;
+                                $to = $call['direction'] === 'outgoing' ? $clientNumber : $ourNumber;
 
                                 yield [
                                     'id' => $call['id'],

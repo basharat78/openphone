@@ -51,7 +51,7 @@ class CallController extends Controller
             $query->where('dispatcher_id', $dispatcherId);
         }
 
-        $calls = $query->latest()->paginate(20)->withQueryString();
+        $calls = $query->orderBy('called_at', 'desc')->paginate(20)->withQueryString();
 
         $selectedDispatcher = $dispatcherId ? $dispatchers->firstWhere('id', $dispatcherId) : null;
 
